@@ -1,0 +1,291 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Job Details - Brighters</title>
+    <link rel="stylesheet" href="style.css">
+    <style>
+        .job-details-container {
+            max-width: 900px;
+            margin: 2rem auto;
+            padding: 0 1rem;
+        }
+        
+        .job-details-card {
+            background: white;
+            padding: 2rem;
+            border-radius: 12px;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.1);
+        }
+        
+        .job-header {
+            border-bottom: 3px solid #3498db;
+            padding-bottom: 1.5rem;
+            margin-bottom: 2rem;
+        }
+        
+        .job-title {
+            font-size: 2rem;
+            color: #2c3e50;
+            margin-bottom: 1rem;
+        }
+        
+        .job-category-badge {
+            display: inline-block;
+            background: linear-gradient(135deg, #27ae60, #2ecc71);
+            color: white;
+            padding: 0.5rem 1.5rem;
+            border-radius: 25px;
+            font-size: 0.9rem;
+            font-weight: 600;
+            margin-bottom: 1rem;
+        }
+        
+        .job-info-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 1.5rem;
+            margin-bottom: 2rem;
+        }
+        
+        .info-box {
+            background: #f8f9fa;
+            padding: 1.5rem;
+            border-radius: 8px;
+        }
+        
+        .info-label {
+            font-weight: 600;
+            color: #3498db;
+            font-size: 0.9rem;
+            text-transform: uppercase;
+            margin-bottom: 0.5rem;
+        }
+        
+        .info-value {
+            font-size: 1.1rem;
+            color: #2c3e50;
+        }
+        
+        .job-description-section {
+            background: #f8f9fa;
+            padding: 2rem;
+            border-radius: 8px;
+            margin-bottom: 2rem;
+        }
+        
+        .job-description-section h3 {
+            color: #2c3e50;
+            margin-bottom: 1rem;
+            font-size: 1.5rem;
+        }
+        
+        .job-description-text {
+            color: #555;
+            line-height: 1.8;
+            white-space: pre-wrap;
+            word-wrap: break-word;
+            font-size: 1rem;
+        }
+        
+        .action-buttons {
+            display: flex;
+            gap: 1rem;
+            margin-top: 2rem;
+        }
+        
+        .apply-btn-large {
+            flex: 1;
+            padding: 1rem 2rem;
+            background: #27ae60;
+            color: white;
+            border: none;
+            border-radius: 8px;
+            font-size: 1.1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        
+        .apply-btn-large:hover {
+            background: #229954;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 15px rgba(39, 174, 96, 0.3);
+        }
+        
+        .back-btn {
+            padding: 1rem 2rem;
+            background: #95a5a6;
+            color: white;
+            border: none;
+            border-radius: 8px;
+            font-size: 1.1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-decoration: none;
+            display: inline-block;
+            text-align: center;
+        }
+        
+        .back-btn:hover {
+            background: #7f8c8d;
+        }
+        
+        @media (max-width: 768px) {
+            .job-title {
+                font-size: 1.5rem;
+            }
+            
+            .job-info-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .action-buttons {
+                flex-direction: column;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <img src="logo.png" alt="Brighters Logo" class="header-logo">
+        <a href="index.html" class="admin-link">Back to Jobs</a>
+    </header>
+    
+    <div class="job-details-container">
+        <div class="job-details-card" id="job-details-content">
+            <p style="text-align: center; color: #999;">Loading job details...</p>
+        </div>
+    </div>
+
+    <script>
+        // Get job ID from URL
+        const urlParams = new URLSearchParams(window.location.search);
+        const jobId = urlParams.get('id');
+
+        // Fix logo styling
+        document.addEventListener('DOMContentLoaded', function() {
+            const logo = document.querySelector('.header-logo');
+            const header = document.querySelector('header');
+            
+            if (logo) {
+                logo.style.height = '110px';
+                logo.style.width = 'auto';
+                logo.style.maxWidth = '350px';
+                logo.style.objectFit = 'contain';
+                logo.style.background = 'transparent';
+                logo.style.display = 'block';
+            }
+            
+            if (header) {
+                header.style.background = 'white';
+                header.style.padding = '1rem';
+                header.style.boxShadow = '0 2px 5px rgba(0,0,0,0.1)';
+            }
+            
+            if (window.innerWidth <= 768) {
+                if (logo) {
+                    logo.style.height = '85px';
+                    logo.style.maxWidth = '250px';
+                }
+            }
+        });
+
+        // Handle window resize
+        window.addEventListener('resize', function() {
+            const logo = document.querySelector('.header-logo');
+            if (logo) {
+                if (window.innerWidth <= 768) {
+                    logo.style.height = '85px';
+                    logo.style.maxWidth = '250px';
+                } else {
+                    logo.style.height = '110px';
+                    logo.style.maxWidth = '350px';
+                }
+            }
+        });
+
+        // Load job details
+        async function loadJobDetails() {
+            try {
+                const response = await fetch('jobs_api.php');
+                const jobs = await response.json();
+                const job = jobs.find(j => j.id == jobId);
+                
+                if (job) {
+                    document.title = `${job.title} - Brighters`;
+                    
+                    document.getElementById('job-details-content').innerHTML = `
+                        <div class="job-header">
+                            <h1 class="job-title">${job.title}</h1>
+                        </div>
+                        
+                        <div class="job-info-grid">
+                            <div class="info-box">
+                                <div class="info-label">Organization</div>
+                                <div class="info-value">${job.company}</div>
+                            </div>
+                            <div class="info-box">
+                                <div class="info-label">Location</div>
+                                <div class="info-value">${job.location}</div>
+                            </div>
+                            <div class="info-box">
+                                <div class="info-label">Salary</div>
+                                <div class="info-value">${job.salary}</div>
+                            </div>
+                            <div class="info-box">
+                                <div class="info-label">Application Deadline</div>
+                                <div class="info-value">${job.deadline}</div>
+                            </div>
+                            <div class="info-box">
+                                <div class="info-label">Posted Date</div>
+                                <div class="info-value">${job.postedDate}</div>
+                            </div>
+                        </div>
+                        
+                        <div class="job-description-section">
+                            <h3>Job Description</h3>
+                            <div class="job-description-text">${job.description}</div>
+                        </div>
+                        
+                        <div class="action-buttons">
+                            <a href="index.html" class="back-btn">← Back to All Jobs</a>
+                            <button class="apply-btn-large" onclick="applyForJob(${job.id})">Apply Now</button>
+                        </div>
+                    `;
+                } else {
+                    document.getElementById('job-details-content').innerHTML = `
+                        <p style="text-align: center; color: #e74c3c;">Job not found.</p>
+                        <div style="text-align: center; margin-top: 1rem;">
+                            <a href="index.html" class="back-btn">← Back to All Jobs</a>
+                        </div>
+                    `;
+                }
+            } catch (error) {
+                document.getElementById('job-details-content').innerHTML = `
+                    <p style="text-align: center; color: #e74c3c;">Error loading job details.</p>
+                `;
+            }
+        }
+
+        // Apply for job function
+        function applyForJob(jobId) {
+            window.location.href = `apply.html?job=${jobId}`;
+        }
+
+        // Load details on page load
+        if (jobId) {
+            loadJobDetails();
+        } else {
+            document.getElementById('job-details-content').innerHTML = `
+                <p style="text-align: center; color: #e74c3c;">No job ID provided.</p>
+                <div style="text-align: center; margin-top: 1rem;">
+                    <a href="index.html" class="back-btn">← Back to All Jobs</a>
+                </div>
+            `;
+        }
+    </script>
+</body>
+</html>

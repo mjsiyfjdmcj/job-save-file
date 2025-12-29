@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Panel - Job Portal</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="admin-enhanced.css">
+</head>
+<body>
+    <div id="login-section">
+        <div class="login-form">
+            <h2>Admin Login</h2>
+            <input type="password" id="admin-password" placeholder="Enter admin password">
+            <button onclick="login()">Login</button>
+            <p id="login-error"></p>
+        </div>
+    </div>
+
+    <div id="admin-panel" style="display: none;">
+        <header>
+            <img src="logo.png" alt="Logo" class="header-logo">
+            <div>
+                <a href="index.html">View Portal</a>
+                <button onclick="logout()">Logout</button>
+            </div>
+        </header>
+
+        <div id="post-jobs" class="admin-section active">
+            <div class="admin-content">
+                <div class="job-form">
+                    <h3>Post New Job</h3>
+                    <input type="text" id="job-title" placeholder="Job Title" required>
+                    <input type="text" id="company" placeholder="Organization Name" required>
+                    <input type="text" id="location" placeholder="Location" required>
+                    <input type="text" id="salary" placeholder="Salary" required>
+                    <input type="date" id="deadline" required>
+                    <textarea id="description" placeholder="Job Description" required style="height: 120px; resize: vertical; overflow-y: auto;"></textarea>
+                    <label for="job-image">Job Image (Optional):</label>
+                    <input type="file" id="job-image" accept=".jpg,.jpeg,.png">
+                    <button onclick="addJob()">Post Job</button>
+                </div>
+
+                <div class="jobs-list">
+                    <h3>Posted Jobs</h3>
+                    <div id="admin-jobs-list"></div>
+                </div>
+            </div>
+        </div>
+
+        <div id="data-collect" class="admin-section">
+            <div class="applications-list">
+                <h3>Job Applications <span id="app-count" class="app-counter">0</span></h3>
+                <div id="admin-applications-list"></div>
+            </div>
+
+            <div class="data-management">
+                <div class="data-header">
+                    <h3>📊 Data Management</h3>
+                </div>
+                
+                <div class="data-stats">
+                    <div class="stat-item">
+                        <div class="stat-number" id="total-jobs">0</div>
+                        <div class="stat-label">Total Jobs</div>
+                    </div>
+                    <div class="stat-item">
+                        <div class="stat-number" id="total-applications">0</div>
+                        <div class="stat-label">Total Applications</div>
+                    </div>
+                    <div class="stat-item">
+                        <div class="stat-number" id="total-visitors">0</div>
+                        <div class="stat-label">Website Visitors</div>
+                    </div>
+                </div>
+
+    <script src="admin_script.js"></script>
+</body>
+</html>

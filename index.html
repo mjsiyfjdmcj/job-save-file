@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Job Portal</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <header>
+        <img src="logo.png" alt="Logo" class="header-logo">
+        <a href="admin.html" class="admin-link">🔑 login</a>
+    </header>
+    
+    <main>
+        <div id="jobs-container">
+            <p id="no-jobs">Loading jobs...</p>
+        </div>
+    </main>
+
+    <div id="job-modal" class="modal">
+        <div class="modal-content">
+            <span class="close">&times;</span>
+            <div id="job-details"></div>
+        </div>
+    </div>
+
+    <div id="apply-modal" class="modal">
+        <div class="modal-content">
+            <span class="close">&times;</span>
+            <div id="apply-form">
+                <h2>📝 Apply for Job</h2>
+                <form id="application-form" enctype="multipart/form-data">
+                    <input type="hidden" id="apply-job-id">
+                    <input type="text" id="applicant-name" placeholder="Your Full Name" required>
+                    <input type="email" id="applicant-email" placeholder="Your Email" required>
+                    <input type="tel" id="applicant-phone" placeholder="Your Phone Number" required>
+                    <input type="text" id="present-address" placeholder="Present Address" required>
+                    <input type="text" id="institution" placeholder="Institution & Study Level" required>
+                    <label for="cv-upload">Upload CV (PDF, JPG, PNG):</label>
+                    <input type="file" id="cv-upload" accept=".pdf,.jpg,.jpeg,.png" required>
+                    <button type="submit">🚀 Submit Application</button>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <script src="public_script.js"></script>
+</body>
+</html>
